@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Img, Heading, Text } from "../../components";
+import { Img, Heading, Text, Button } from "../../components";
 import Header from "../../components/Header";
 import MacBookProOneImage from "../../components/MacBookProOneImage";
 import MacBookProOneRowiconlistul from "../../components/MacBookProOneRowiconlistul";
@@ -42,48 +42,39 @@ export default function Home() {
                 </Heading>
               </div> */}
               <div className="flex justify-betweem items-center w-[49%] h-[100%] md:w-full gap-5 p-2.5">
-                <button className="flex flex-row w-[100%] h-[100%] justify-center items-center rounded-lg bg-neutral-200 shadow-md">
-                  <Img src="images/img_icon_plus.svg" alt="iconplus_one" className="h-[16px] w-[16px]" />
-                  <Heading size="md" as="h4" className="mr-[13px] margin-left: px-3 md:mr-0 !text-gray-600_01">
+                <Button leftIcon = {<Img src="images/img_icon_plus.svg" alt="iconplus_one" className="h-[16px] w-[16px]" />} rightIcon = {<Heading size="md" as="h4" className="mr-[13px] margin-left: px-3 md:mr-0 !text-gray-600_01">
                     New
-                  </Heading>
-                </button>
+                  </Heading>} className="flex flex-row w-[100%] h-[100%] justify-center items-center rounded-lg bg-neutral-200 shadow-md">
+                </Button>
               </div>
-              <button className="flex justify-between items-center w-[49%] md:w-full gap-5 p-2.5">
-                <Img src="images/img_time.svg" alt="time_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />
-                <Heading size="md" as="h4" className="mr-[13px] md:mr-0 !text-gray-600_01">
+              <Button leftIcon = {<Img src="images/img_time.svg" alt="time_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />} rightIcon = {<Heading size="md" as="h4" className="mr-[13px] md:mr-0 !text-gray-600_01">
                   Recent
-                </Heading>
-              </button>
-              <button className="flex justify-between items-center w-[51%] md:w-full gap-5 p-2.5">
-                <Img src="images/img_icon_star_o.svg" alt="image_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />
-                <Heading size="md" as="h5" className="mr-[13px] md:mr-0 !text-gray-600_01">
+                </Heading>} className="flex justify-between items-center w-[49%] md:w-full gap-5 p-2.5">
+              </Button>
+              <Button leftIcon = {<Img src="images/img_icon_star_o.svg" alt="image_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />} rightIcon = {<Heading size="md" as="h5" className="mr-[13px] md:mr-0 !text-gray-600_01">
                   Starred
-                </Heading>
-              </button>
-              <button className="flex justify-between items-center w-[46%] md:w-full gap-5 p-2.5">
-                <Img
+                </Heading>} className="flex justify-between items-center w-[51%] md:w-full gap-5 p-2.5">
+                
+              </Button>
+              <Button leftIcon = {<Img
                   src="images/img_icon_trash.svg"
                   alt="icontrash_one"
                   className="h-[16px] w-[16px] ml-[13px] md:ml-0"
-                />
-                <Heading size="md" as="h6" className="mr-[13px] md:mr-0 !text-gray-600_01">
+                />} rightIcon = {<Heading size="md" as="h6" className="mr-[13px] md:mr-0 !text-gray-600_01">
                   Trash
-                </Heading>
-              </button>
+                </Heading>} className="flex justify-between items-center w-[46%] md:w-full gap-5 p-2.5">
+              </Button>
             </div>
             <div className="md:self-stretch md:p-5 flex-1">
               <div className="flex justify-between items-center gap-5 p-4 border-indigo-50 border-b border-solid bg-white-A700">
-                <button className="flex items-center ml-2 gap-2 md:ml-0">
-                  <Text size="s" as="p" className="self-end !text-blue_gray-900">
+                <Button leftIcon = {<Text size="s" as="p" className="self-end !text-blue_gray-900">
                     My Drive
-                  </Text>
-                  <Img
+                  </Text>} rightIcon = {<Img
                     src="images/img_icon_caret_bottom_blue_gray_900.svg"
                     alt="iconcaret_three"
                     className="h-[16px] w-[16px]"
-                  />
-                </button>
+                  />} className="flex items-center ml-2 gap-2 md:ml-0">
+                </Button>
                 <MacBookProOneRowiconlistul
                   iconlistulOne="images/img_icon_list_ul.svg"
                   className="flex items-center mr-1 gap-2 md:mr-0"
