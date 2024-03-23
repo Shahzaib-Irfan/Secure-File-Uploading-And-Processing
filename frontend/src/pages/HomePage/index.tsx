@@ -83,46 +83,16 @@ export default function Home() {
               <div className="flex md:flex-col justify-center items-start gap-6">
                 <div className="flex flex-col md:self-stretch mt-4 flex-1">
                   <div className="flex justify-between gap-5">
-                    <div className="flex">
+                    {/* <div className="flex">
                       <Heading size="s" as="h6" className="!text-gray-600_01">
                         Folders
                       </Heading>
-                    </div>
+                    </div> */}
                     <div className="flex items-center gap-2.5">
                       <Heading size="s" as="h6" className="!text-gray-600_01">
                         Name
                       </Heading>
                       <Img src="images/img_icon_order_arrow_up.svg" alt="iconorder_one" className="h-[16px] w-[16px]" />
-                    </div>
-                  </div>
-                  <div className="flex md:flex-col w-[74%] md:w-full mt-4 gap-6">
-                    <div className="flex">
-                      <div className="flex items-center gap-4 p-4 border-indigo-50 border border-solid bg-white-A700 rounded">
-                        <div className="flex flex-col">
-                          <Img src="images/img_icon.svg" alt="2020_planning" className="h-[20px]" />
-                        </div>
-                        <Heading as="p">2020 Planning</Heading>
-                      </div>
-                    </div>
-                    <div className="flex">
-                      <div className="flex items-center gap-4 p-4 border-indigo-50 border border-solid bg-white-A700 rounded">
-                        <div className="flex flex-col">
-                          <Img src="images/img_icon.svg" alt="icon_one" className="h-[20px]" />
-                        </div>
-                        <Heading as="p" className="self-start">
-                          Finances
-                        </Heading>
-                      </div>
-                    </div>
-                    <div className="flex">
-                      <div className="flex items-center gap-4 p-4 border-indigo-50 border border-solid bg-white-A700 rounded">
-                        <div className="flex flex-col">
-                          <Img src="images/img_icon.svg" alt="icon_one" className="h-[20px]" />
-                        </div>
-                        <Heading as="p" className="self-start">
-                          Work Files
-                        </Heading>
-                      </div>
                     </div>
                   </div>
                   <div className="flex mt-12 py-px">
