@@ -30,7 +30,7 @@ const Text: React.FC<React.PropsWithChildren<TextProps>> = ({
   className = "",
   as,
   size = "xs",
-  font = "Arial, sans-serif", // Default font
+  font = fonts[1], // Default font
   ...restProps
 }) => {
   const Component = as || "p";

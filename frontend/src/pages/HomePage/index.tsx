@@ -10,7 +10,6 @@ export default function Home() {
     <>
       <Helmet>
         <title>IncogFiles</title>
-        <meta name="description" content="Web site created using create-react-app" />
       </Helmet>
       <div className="w-full bg-white-A700">
         <Header className="p-4 border-indigo-50 border-b border-solid bg-white-A700" />
