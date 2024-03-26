@@ -3,6 +3,8 @@ import { useRoutes } from "react-router-dom";
 import NotFound from "pages/NotFound";
 import Home from "pages/HomePage";
 import HomeListView from "pages/files2";
+import LoginPage from "pages/Login";
+import SigninPage from "pages/Signin";
 
 const ProjectRoutes = () => {
   let element = useRoutes([
@@ -15,6 +17,14 @@ const ProjectRoutes = () => {
     {
       path: "filesTwo",
       element: <HomeListView />,
+    },
+    {
+      path: "signup",
+      element: <LoginPage />,
+    },
+    {
+      path: "signin",
+      element: <SigninPage />,
     },
   ]);
 
