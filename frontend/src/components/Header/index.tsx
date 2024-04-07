@@ -77,11 +77,11 @@ export default function Header({ ...props }: Props) {
             <div className="w-full">
               <div>
                 <div>
-                  <div className="bg-white-A700 rounded-[16px]">
+                  <div className="bg-white-A700 rounded-[8px]">
                     <Img
-                      src="images/img_paul_hanaoka_ov.png"
+                      src="images/img_paul_hanaoka_ov_32x32.png"
                       alt="paulhanaokaov"
-                      className="h-[32px] w-[32px] rounded-[50%]"
+                      className="h-[32px] w-[100%] rounded-[50%]"
                     />
                   </div>
                 </div>

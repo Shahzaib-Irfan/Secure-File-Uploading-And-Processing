@@ -1,8 +1,18 @@
 import React from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Button2, Img, Text, Input2, Heading } from "../../components";
+import { Button2, Img, Text, Input2, StatefulInput2, Heading } from "../../components";
+import { Link } from 'react-router-dom';
+import { useUserContext } from "contexts/UserContext";
 
-export default function SigninPage() {
+export default function SignUpPage() {
+  const { loginWithAuthentication } = useUserContext();
+  const [state, setState] = useState({ firstName: "", lastName: "", email: "", password: "" });
+
+  const updateState = (fieldName) => (value) => {
+    setState(prevState => ({ ...prevState, [fieldName]: value }));
+  };
+
   return (
     <>
       <Helmet>
@@ -15,45 +25,53 @@ export default function SigninPage() {
           <div className="flex flex-col items-center w-[31%] md:w-full">
             <div className="flex flex-col self-start items-start gap-[11px]">
               <a href="#">
-                <Heading as="h1">Sign in</Heading>
+                <Heading size="md" as="h1">Sign Up</Heading>
               </a>
               <Text as="p">Create your account in a seconds</Text>
             </div>
             <div className="flex flex-col self-stretch items-start mt-[35px]">
-              <Input2 shape="round" type="text" name="firstName" placeholder={`First Name:`} className="sm:pr-5" />
-              <Input2
+              <StatefulInput2
+                shape="round"
+                type="text"
+                name="firstName"
+                placeholder={`First Name:`}
+                className="sm:pr-5"
+                fieldName="firstName"
+                updateState={updateState}
+              />
+              <StatefulInput2
                 shape="round"
                 type="text"
                 name="lastName"
                 placeholder={`Last Name:`}
-                className="mt-[33px] sm:pr-5"
+                className="sm:pr-5"
+                fieldName="lastName"
+                updateState={updateState}
               />
-              <Input2
+              <StatefulInput2
                 shape="round"
-                type="email"
+                type="text"
                 name="email"
-                placeholder={`Email Address:`}
-                className="mt-[22px] sm:pr-5"
+                placeholder={`Email:`}
+                className="sm:pr-5"
+                fieldName="email"
+                updateState={updateState}
               />
-              <Input2
+              <StatefulInput2
                 shape="round"
                 type="password"
                 name="password"
-                placeholder={`Create Password:`}
-                className="mt-[33px] sm:pr-5"
+                placeholder={`password:`}
+                className="sm:pr-5"
+                fieldName="password"
+                updateState={updateState}
               />
-              {/* <CheckBox
-                name="checkmark"
-                label="I agree to the terms and privacy policy"
-                id="checkmark"
-                className="mt-[51px] gap-1.5 py-[5px] text-gray-600 text-left text-base"
-              /> */}
-              <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold">
+              <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold" onClick={() => loginWithAuthentication()}>
                 Create an account
               </Button2>
               <Text as="p" className="mt-[39px]">
                 <span className="text-gray-600">Already a member?&nbsp;</span>
-                <span className="text-deep_purple-A200 font-medium">Login</span>
+                <Link className="text-deep_purple-A200 font-medium" to="/signin">Login</Link>
               </Text>
             </div>
             <div className="self-stretch h-[20px] mt-[38px] relative">

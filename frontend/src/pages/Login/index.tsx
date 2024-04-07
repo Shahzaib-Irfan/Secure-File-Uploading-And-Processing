@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { Img, Button2, Text, Input2, Heading } from "../../components";
+import {Link} from 'react-router-dom';
 
 export default function LoginPage() {
   return (
@@ -13,7 +14,7 @@ export default function LoginPage() {
         <Img src="images/img_rectangle_1.png" alt="image" className="w-[57%] md:w-full object-cover" />
         <div className="flex flex-col items-center w-[31%] md:w-full mt-[88px]">
           <a href="Login" target="_blank" rel="noreferrer" className="self-start">
-            <Heading as="h1">Login</Heading>
+            <Heading size = "md" as="h1">Login</Heading>
           </a>
           <Text as="p" className="self-start mt-3.5">
             Login your account in a seconds
@@ -34,11 +35,14 @@ export default function LoginPage() {
                 </Text>
               </div>
               <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold">
-                Log in{" "}
+                Log in
               </Button2>
               <Text as="p" className="mt-[39px]">
                 <span className="text-gray-600">Don’t have an account?&nbsp;</span>
-                <span className="text-deep_purple-A200 font-medium">Sign up</span>
+                <Link to = '/signup'>
+                  <span className="text-deep_purple-A200 font-medium">Sign up</span>
+                </Link>
+                
               </Text>
             </div>
           </div>

@@ -6,4 +6,5 @@ import { Input } from "./Input";
 import { Input2 } from "./Input2";
 import { Button2 } from "./Button2";
 import { CheckBox } from "./CheckBox";
-export { Img, Text, Heading, Button, Input, Input2, Button2,CheckBox  };
+import { StatefulInput2 } from "./StatefulInput2";
+export { Img, Text, Heading, Button, Input, Input2, Button2,CheckBox, StatefulInput2  };

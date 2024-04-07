@@ -15,8 +15,8 @@ export type HeadingProps = Partial<{
 
 const Heading: React.FC<React.PropsWithChildren<HeadingProps>> = ({
   children,
-  className = "",
-  size = "xs",
+  className,
+  size,
   as,
   ...restProps
 }) => {

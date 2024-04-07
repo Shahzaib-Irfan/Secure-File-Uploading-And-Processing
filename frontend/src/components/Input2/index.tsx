@@ -49,7 +49,7 @@ const Input2 = React.forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      if (onChange) onChange(e?.target?.value);
+      if (onChange) onChange(e);
     };
 
     return (

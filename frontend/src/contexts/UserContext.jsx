@@ -44,6 +44,7 @@ const initialState = {
   singleUserError: false,
   currentUser: getUserFromMemory("currentUser"),
   singleUserFiles: [],
+  formInputs: { firstName: "", lastName: "", email: "", password: "" },
   singleFile: {},
   singleFileLoading: false,
   singleFileError: false,

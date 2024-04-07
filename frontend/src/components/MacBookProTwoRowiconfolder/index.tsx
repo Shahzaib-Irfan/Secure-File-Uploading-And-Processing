@@ -43,11 +43,11 @@ export default function MacBookProTwoRowiconfolder({
           <div className="w-[19%]">
             <div>
               <div>
-                <div className="bg-white-A700 rounded-[16px]">
+                <div className="bg-white-A700 rounded-[32px]">
                   <Img
                     src="images/img_paul_hanaoka_ov_1.png"
                     alt="paulhanaokaov"
-                    className="h-[32px] w-[32px] rounded-[50%]"
+                    className="h-[32px] w-[32px] rounded-[25%]"
                   />
                 </div>
               </div>

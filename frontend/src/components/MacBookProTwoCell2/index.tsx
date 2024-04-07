@@ -17,7 +17,7 @@ export default function MacBookProTwoCell2({ bessieCooper = "Bessie Cooper", ...
                 <Img
                   src="images/img_paul_hanaoka_ov_32x32.png"
                   alt="circleimage"
-                  className="h-[32px] w-[32px] rounded-[50%]"
+                  className="h-[64px] w-[64px] rounded-[25%]"
                 />
               </div>
             </div>
