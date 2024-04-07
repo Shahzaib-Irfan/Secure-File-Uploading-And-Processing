@@ -55,13 +55,21 @@ const initialState = {
 const UserContext = React.createContext();
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const loginWithAuthentication = async (username, password) => {
+  const loginWithAuthentication = async (email, password) => {
     dispatch({ type: GET_CURRENT_USER_BEGIN });
     try {
-      const response = await axios.post("http://localhost:3005/userApi/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:3005/userApi/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const { token, user, redirect } = response.data;
       dispatch({
         type: GET_CURRENT_USER_SUCCESS,
@@ -74,12 +82,54 @@ export const UserProvider = ({ children }) => {
       });
     }
   };
+
+  const SignUp = async (firstName, lastName, email, password) => {
+    dispatch({ type: GET_CURRENT_USER_BEGIN });
+    try {
+      const response = await axios.post(
+        "http://localhost:3005/userApi/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const { message } = response.data;
+      console.log(message);
+      if (message == "Invalid credentials") {
+        const response_data = await axios.post(
+          "http://localhost:3005/userApi/users",
+          {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const { token, user, redirect } = response_data.data;
+        window.location.href = redirect;
+      }
+    } catch (error) {
+      dispatch({
+        type: GET_CURRENT_USER_ERROR,
+      });
+    }
+  };
   const logout = async () => {
     dispatch({
       type: GET_SINGLE_USER_SUCCESS,
       payload: { user: {}, token: "" },
     });
-    window.location.href = "/login";
+    window.location.href = "/sigin";
   };
 
   const fetchSingleUser = async (url) => {
@@ -100,6 +150,7 @@ export const UserProvider = ({ children }) => {
         loginWithAuthentication,
         logout,
         fetchSingleUser,
+        SignUp,
       }}
     >
       {children}

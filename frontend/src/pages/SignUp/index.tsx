@@ -4,9 +4,10 @@ import { Helmet } from "react-helmet";
 import { Button2, Img, Text, Input2, StatefulInput2, Heading } from "../../components";
 import { Link } from 'react-router-dom';
 import { useUserContext } from "contexts/UserContext";
+import { stat } from "fs";
 
 export default function SignUpPage() {
-  const { loginWithAuthentication } = useUserContext();
+  const { SignUp } = useUserContext();
   const [state, setState] = useState({ firstName: "", lastName: "", email: "", password: "" });
 
   const updateState = (fieldName) => (value) => {
@@ -66,15 +67,17 @@ export default function SignUpPage() {
                 fieldName="password"
                 updateState={updateState}
               />
-              <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold" onClick={() => loginWithAuthentication()}>
+              <Button2 size="sm" shape="round" className="w-full mt-[34px] sm:px-5 font-bold" onClick={() => SignUp(state.firstName, state.lastName, state.email, state.password)}>
+                <Text className="text-gray-600 font-large">
                 Create an account
+                </Text>
               </Button2>
               <Text as="p" className="mt-[39px]">
                 <span className="text-gray-600">Already a member?&nbsp;</span>
                 <Link className="text-deep_purple-A200 font-medium" to="/signin">Login</Link>
               </Text>
             </div>
-            <div className="self-stretch h-[20px] mt-[38px] relative">
+            {/* <div className="self-stretch h-[20px] mt-[38px] relative">
               <a href="#" className="w-max h-max left-0 bottom-0 right-0 top-0 m-auto absolute">
                 <Text as="p">Or continue with</Text>
               </a>
@@ -93,7 +96,7 @@ export default function SignUpPage() {
               <Button2 shape="square">
                 <Img src="images/img_twitter.png" />
               </Button2>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

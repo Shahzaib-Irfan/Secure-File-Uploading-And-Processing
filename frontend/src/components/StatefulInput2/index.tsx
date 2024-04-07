@@ -8,13 +8,7 @@ export const StatefulInput2 = ({
   ...props
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { state } = useUserContext();
 
-  useEffect(() => {
-    if (inputRef.current && state) {
-      inputRef.current.value = state[fieldName];
-    }
-  }, [fieldName, state, inputRef.current]);
 
   const handleChange = (e) => {
     updateState(fieldName)(e.target.value);
