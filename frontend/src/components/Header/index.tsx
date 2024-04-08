@@ -1,6 +1,8 @@
 import React from "react";
 import { CloseSVG } from "../../assets/images";
-import { Img, Button, Input, Heading } from "./..";
+import { Img, Button, Button2, Input, Heading, Text } from "./..";
+import { Link } from "react-router-dom";
+import { useUserContext } from "contexts/UserContext";
 
 interface Props {
   className?: string;
@@ -8,6 +10,7 @@ interface Props {
 
 export default function Header({ ...props }: Props) {
   const [searchBarValue, setSearchBarValue] = React.useState("");
+  const {currentUser, token, logout} = useUserContext();
 
   return (
     <header {...props}>
@@ -78,11 +81,15 @@ export default function Header({ ...props }: Props) {
               <div>
                 <div>
                   <div className="bg-white-A700 rounded-[8px]">
-                    <Img
-                      src="images/img_paul_hanaoka_ov_32x32.png"
-                      alt="paulhanaokaov"
-                      className="h-[32px] w-[100%] rounded-[50%]"
-                    />
+                    {token !== "" ? <Button2 size="xs" variant = "fill" shape="round" className="w-full mt-4 rounded-full py-3" onClick={() => logout()}>
+                      <Text>
+                        Logout
+                      </Text>
+                    </Button2> : <Link to = "/signin">
+                      <Text size="s" as="p" className="self-end !text-blue_gray-900">
+                        Login
+                      </Text>
+                    </Link>}
                   </div>
                 </div>
               </div>

@@ -126,10 +126,10 @@ export const UserProvider = ({ children }) => {
   };
   const logout = async () => {
     dispatch({
-      type: GET_SINGLE_USER_SUCCESS,
-      payload: { user: {}, token: "" },
+      type: GET_CURRENT_USER_SUCCESS,
+      payload: { user: {}, token: "", redirect: "/signin" },
     });
-    window.location.href = "/sigin";
+    window.location.href = "/signin";
   };
 
   const fetchSingleUser = async (url) => {
