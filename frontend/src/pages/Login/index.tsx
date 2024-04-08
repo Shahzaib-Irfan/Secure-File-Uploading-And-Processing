@@ -1,9 +1,19 @@
 import React from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Img, Button2, Text, Input2, Heading } from "../../components";
+import { Img, Button2, Text, Heading, StatefulInput2 } from "../../components";
 import {Link} from 'react-router-dom';
+import { useUserContext } from "contexts/UserContext";
+import { stat } from "fs";
 
 export default function LoginPage() {
+    const { loginWithAuthentication } = useUserContext();
+  const [state, setState] = useState({ email: "", password: "" });
+
+  const updateState = (fieldName) => (value) => {
+    setState(prevState => ({ ...prevState, [fieldName]: value }));
+  };
+
   return (
     <>
       <Helmet>
@@ -21,21 +31,33 @@ export default function LoginPage() {
           </Text>
           <div className="self-stretch mt-[17px]">
             <div className="flex flex-col items-start">
-              <Input2 shape="round" type="email" name="email" placeholder={`Email Address`} className="sm:pr-5" />
-              <Input2
+              <StatefulInput2
+                shape="round"
+                type="text"
+                name="email"
+                placeholder={`Email:`}
+                className="sm:pr-5"
+                fieldName="email"
+                updateState={updateState}
+              />
+              <StatefulInput2
                 shape="round"
                 type="password"
                 name="password"
-                placeholder={`Password`}
-                className="mt-[33px] sm:pr-5"
+                placeholder={`password:`}
+                className="sm:pr-5"
+                fieldName="password"
+                updateState={updateState}
               />
               <div className="flex self-stretch justify-between items-center mt-[50px] gap-5">
                 <Text as="p" className="self-end mb-[3px] !text-deep_purple-A200">
                   Forget password?
                 </Text>
               </div>
-              <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold">
-                Log in
+              <Button2 size="xs" shape="round" className="w-full mt-[34px] sm:px-5 font-bold" onClick={() => loginWithAuthentication(state.email, state.password)}>
+                <Text>
+                  Log in
+                </Text>
               </Button2>
               <Text as="p" className="mt-[39px]">
                 <span className="text-gray-600">Don’t have an account?&nbsp;</span>
