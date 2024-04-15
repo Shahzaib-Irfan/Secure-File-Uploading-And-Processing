@@ -2,12 +2,11 @@ const File = require("../models/file");
 
 async function createFile(req, res) {
   try {
-    const { fileLink, userEmail, fileType, fileName } = req.body;
+    const { fileLink, userEmail, fileName } = req.body;
 
     const fileData = {
       fileLink,
       userEmail,
-      fileType,
       fileName,
     };
     console.log(fileData);
@@ -58,7 +57,6 @@ async function updateFile(req, res) {
       {
         fileName: req.body["fileName"],
         fileLink: req.body["fileLink"],
-        fileType: req.body["fileType"],
         userEmail: req.body["userEmail"],
       }
     );
