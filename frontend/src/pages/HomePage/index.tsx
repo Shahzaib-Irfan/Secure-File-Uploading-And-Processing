@@ -1,11 +1,90 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
+import axios from "axios";
+import AWS from "aws-sdk";
+import { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand, CopyObjectCommand} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { Helmet } from "react-helmet";
 import { Img, Heading, Text, Button } from "../../components";
 import Header from "../../components/Header";
 import MacBookProOneImage from "../../components/MacBookProOneImage";
 import MacBookProOneRowiconlistul from "../../components/MacBookProOneRowiconlistul";
+import { useUserContext } from "contexts/UserContext";
 
 export default function Home() {
+  const fileInputRef = useRef(null);
+  const {currentUser, token} = useUserContext();
+
+// Instantiate S3 client
+  const s3Client = new S3Client({
+    region: process.env.REACT_APP_AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    },
+  });
+
+  const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  console.log(file);
+  if (!file) return;
+
+  try {
+    const currentDatetime = new Date().toISOString().replace(/[-:.]/g, '');
+
+    const filenameWithDatetime = `${currentDatetime}_${file.name}`;
+    const params = {
+      Bucket: "incog-files.dev",
+      Key: "uploads/" + filenameWithDatetime,
+      Body: file,
+      ContentType: "image/jpeg", // Set content type to "image/jpeg" for JPEG images
+    };
+
+    const data = await s3Client.send(new PutObjectCommand(params));
+
+    const url = await putObject(filenameWithDatetime);
+    const get_url = await getObject(filenameWithDatetime);
+    
+    {token !== "" &&  axios.post('http://localhost:3005/fileApi/files', {
+    fileLink: get_url,
+    fileName: filenameWithDatetime,
+    userEmail: currentUser.email,
+  })
+  .catch(error => {
+    console.error("Error uploading file to backend:", error);
+  });
+}
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+};
+
+
+async function putObject(fileName)
+{
+    const command = new PutObjectCommand({
+        Bucket: "incog-files.dev",
+        Key: "uploads/" + fileName,
+    })
+
+    const url = await getSignedUrl(s3Client, command);
+    return url;
+}
+
+async function getObject(filename)
+{
+    const command = new GetObjectCommand({
+        Bucket: "incog-files.dev",
+        Key: "uploads/" + filename,
+    })
+    const url = await getSignedUrl(s3Client, command)
+    // getSignedUrl(s3Client, command, {expiresIn: 20}) 20 seconds
+    return url
+}
+
+  const handleButtonClick = () => {
+    // Trigger file input click
+    fileInputRef.current.click();
+  };
   return (
     <>
       <Helmet>
@@ -40,11 +119,20 @@ export default function Home() {
                   Shared with me
                 </Heading>
               </div> */}
-              <div className="flex justify-betweem items-center w-[49%] h-[100%] md:w-full gap-5 p-2.5">
-                <Button leftIcon = {<Img src="images/img_icon_plus.svg" alt="iconplus_one" className="h-[16px] w-[16px]" />} rightIcon = {<Heading size="md" as="h4" className="mr-[13px] margin-left: px-3 md:mr-0 !text-gray-600_01">
-                    New
-                  </Heading>} className="flex flex-row w-[100%] h-[100%] justify-center items-center rounded-lg bg-neutral-200 shadow-md">
-                </Button>
+              <div className="flex justify-between items-center w-[49%] h-[100%] md:w-full gap-5 p-2.5">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  onClick={handleButtonClick}
+                  className="flex flex-row w-[100%] h-[100%] justify-center items-center rounded-lg bg-neutral-200 shadow-md"
+                >
+                  <img src="images/img_icon_plus.svg" alt="iconplus_one" className="h-[16px] w-[16px]" />
+                  <h4 className="mr-[13px] margin-left: px-3 md:mr-0 text-gray-600_01">New</h4>
+                </button>
               </div>
               <Button leftIcon = {<Img src="images/img_time.svg" alt="time_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />} rightIcon = {<Heading size="md" as="h4" className="mr-[13px] md:mr-0 !text-gray-600_01">
                   Recent

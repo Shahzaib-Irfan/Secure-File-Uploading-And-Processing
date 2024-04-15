@@ -30,6 +30,7 @@ export const FilesProvider = ({ children }) => {
   const handleSetModeUpdate = (value) => {
     dispatch({ type: "SETMODE", payload: value });
   };
+
   const fetchFiles = async () => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
