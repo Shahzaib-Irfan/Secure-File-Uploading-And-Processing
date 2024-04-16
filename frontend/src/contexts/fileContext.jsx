@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
-import reducer from "../reducers/dish_reducer";
+import reducer from "../reducers/file_reducer";
 //import { products_url as url } from "../utils/constants";
 import {
   GET_FILES_BEGIN,
@@ -10,6 +10,7 @@ import {
   GET_SINGLE_FILE_SUCCESS,
   GET_SINGLE_FILE_ERROR,
 } from "../actions";
+import { useUserContext } from "./UserContext";
 
 const initialState = {
   isSideBarOpen: false,
@@ -26,7 +27,7 @@ const FilesContext = React.createContext();
 
 export const FilesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  const { currentUser, token } = useUserContext();
   const handleSetModeUpdate = (value) => {
     dispatch({ type: "SETMODE", payload: value });
   };
@@ -44,22 +45,27 @@ export const FilesProvider = ({ children }) => {
     }
   };
 
-  const fetchFilesByRID = async (id) => {
+  const fetchFilesByEmail = async (id) => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
-      const response = await axios.get(
-        `http://localhost:3005/dishApi/dishes/getDishesByRID/${id}`
-      );
-      const data = await response.data;
-      dispatch({ type: GET_FILES_SUCCESS, payload: data });
+      if (token !== "") {
+        const response = await axios.get(
+          `http://localhost:3005/fileApi/files/getFilesByEmail/${currentUser.email}`
+        );
+        const data = await response.data;
+        console.log(data);
+        dispatch({ type: GET_FILES_SUCCESS, payload: data });
+      } else {
+        dispatch({ type: GET_FILES_SUCCESS, payload: [] });
+      }
     } catch (error) {
       dispatch({ type: GET_FILES_ERROR });
     }
   };
   useEffect(() => {
-    fetchFiles();
+    fetchFilesByEmail();
   }, []);
-  const fetchSingleDish = async (url) => {
+  const fetchSingleFile = async (url) => {
     dispatch({ type: GET_SINGLE_FILE_BEGIN });
     try {
       const response = await axios.get(url);
@@ -76,7 +82,7 @@ export const FilesProvider = ({ children }) => {
         fetchSingleFile,
         fetchFiles,
         handleSetModeUpdate,
-        fetchFilesByRID,
+        fetchFilesByEmail,
       }}
     >
       {children}

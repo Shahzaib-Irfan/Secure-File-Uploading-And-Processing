@@ -9,10 +9,12 @@ import Header from "../../components/Header";
 import MacBookProOneImage from "../../components/MacBookProOneImage";
 import MacBookProOneRowiconlistul from "../../components/MacBookProOneRowiconlistul";
 import { useUserContext } from "contexts/UserContext";
+import { useFilesContext } from "contexts/fileContext";
 
 export default function Home() {
   const fileInputRef = useRef(null);
   const {currentUser, token} = useUserContext();
+  const {files, fetchFilesByEmail} = useFilesContext();
 
 // Instantiate S3 client
   const s3Client = new S3Client({
@@ -22,7 +24,9 @@ export default function Home() {
       secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
     },
   });
-
+  useEffect(() =>{
+    fetchFilesByEmail();
+  }, [])
   const handleFileChange = async (event) => {
   const file = event.target.files[0];
   console.log(file);
@@ -52,6 +56,7 @@ export default function Home() {
   .catch(error => {
     console.error("Error uploading file to backend:", error);
   });
+  fetchFilesByEmail();
 }
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -188,190 +193,26 @@ async function getObject(filename)
                     </Heading>
                   </div>
                   <div className="mt-4 gap-6 grid-cols-[repeat(auto-fill,_minmax(234px_,_1fr))] grid">
-                    <div className="flex w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Jane Cooper
-                                </Heading>
+                    {files.map((file) =>{
+                      return (
+                        <div className="flex w-full">
+                          <div className="w-full shadow-xs rounded">
+                            <MacBookProOneImage fileLink={file.fileLink} />
+                            <div className="p-2 bg-white-A700">
+                              <div className="my-1">
+                                <div className="flex justify-end">
+                                  <div className="flex">
+                                    <Heading as="p" className="self-end">
+                                      {file.fileName.slice(20, file.fileName.length)}
+                                    </Heading>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_160x234.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Brooklyn Simmons
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_1.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Guy Hawkins
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_2.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-start">
-                                  Devon Lane
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_3.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-start">
-                                  Darrell Steward
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_4.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Jenny Wilson
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-center w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_5.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Brooklyn Simmons
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-center w-full">
-                      <div className="w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_6.png" />
-                        <div className="p-2 bg-white-A700">
-                          <div className="my-1">
-                            <div className="flex justify-end">
-                              <div className="flex">
-                                <Heading as="p" className="self-end">
-                                  Ryan Jones
-                                </Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full">
-                      <div className="flex flex-col w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_7.png" />
-                        <div className="flex self-end p-2 bg-white-A700">
-                          <div className="flex my-1">
-                            <div className="flex">
-                              <div className="flex">
-                                <Heading as="p">8º año - trabajo de investiga...</Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full">
-                      <div className="flex flex-col w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_8.png" />
-                        <div className="flex self-end p-2 bg-white-A700">
-                          <div className="flex my-1">
-                            <div className="flex">
-                              <div className="flex">
-                                <Heading as="p">8º año - trabajo de investiga...</Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                      <div className="flex flex-col w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_9.png" />
-                        <div className="flex self-end p-2 bg-white-A700">
-                          <div className="flex my-1">
-                            <div className="flex">
-                              <div className="flex">
-                                <Heading as="p">8º año - trabajo de investiga...</Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-end w-full">
-                      <div className="flex flex-col w-full shadow-xs rounded">
-                        <MacBookProOneImage janeCooperOne="images/img_brady_bellini_w_10.png" />
-                        <div className="flex self-end p-2 bg-white-A700">
-                          <div className="flex my-1">
-                            <div className="flex">
-                              <div className="flex">
-                                <Heading as="p">8º año - trabajo de investiga...</Heading>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      )
+                  })}
                   </div>
                 </div>
                 {/* <div className="flex flex-col items-center w-[6%] md:w-full px-4 border-indigo-50 border-l border-solid bg-white-A700">
