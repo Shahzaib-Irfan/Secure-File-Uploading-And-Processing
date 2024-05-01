@@ -1,5 +1,11 @@
 const File = require("../models/file");
 
+
+function sanitizePath(str) {
+  const pathTraversalPattern = new RegExp('(\\.\\.)|(%2e%2e)|(%2e%2f)|(%2f%2e)|(%5c%2e%2e)|(%5c%2e%2f)|(%5c%2f%2e)|(\\/)', 'gi');
+  return str.replace(pathTraversalPattern, '');
+}
+
 async function createFile(req, res) {
   try {
     const { fileLink, userEmail, fileName } = req.body;

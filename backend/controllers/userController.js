@@ -23,6 +23,12 @@ async function getUsers(req, res) {
     res.send(500).json({ error: err.message });
   }
 }
+async function resSample(req,res){
+  try{
+    await res.json(req.params)
+  } 
+  catch(err){}
+}
 
 async function getSingleUser(req, res) {
   try {
@@ -89,4 +95,5 @@ module.exports = {
   deleteUser,
   login,
   adminDasboard,
+  resSample
 };

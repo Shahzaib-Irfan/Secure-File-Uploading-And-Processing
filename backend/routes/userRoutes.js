@@ -14,4 +14,5 @@ router.put("/users/updateUser/:id", userController.updateUser);
 router.delete("/users/deleteUser/:id", userController.deleteUser);
 router.post("/admin", userController.adminDasboard);
 
+
 module.exports = router;

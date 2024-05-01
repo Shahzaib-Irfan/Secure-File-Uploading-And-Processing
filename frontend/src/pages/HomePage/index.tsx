@@ -14,6 +14,11 @@ import { AxiosResponse } from 'axios';
 import CloudmersiveVirusApiClient from 'cloudmersive-virus-api-client';
 import Loading from '../../constants/Loading';
 
+function sanitizePath(str: string): string {
+  const pathTraversalPattern = new RegExp('(\\.\\.)|(%2e%2e)|(%2e%2f)|(%2f%2e)|(%5c%2e%2e)|(%5c%2e%2f)|(%5c%2f%2e)|(\\/)', 'gi');
+  return str.replace(pathTraversalPattern, '');
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -78,10 +83,12 @@ export default function Home() {
           .catch((err) => console.error(err));
     
     if(malicious === 0){
-
+          const sanitizedFileName = sanitizePath(file.name.substring(0, file.name.lastIndexOf('.')))
+          file.name = sanitizedFileName + '.' + file.name.substring(file.name.lastIndexOf('.') + 1)
           const currentDatetime = new Date().toISOString().replace(/[-:.]/g, '');
-      
-          const filenameWithDatetime = `${currentDatetime}_${file.name}`;
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+          const filenameWithDatetime = `${currentDatetime}${uniqueSuffix}_${file.name}`;
+          console.log(filenameWithDatetime)
           const params = {
             Bucket: "incog-files.dev",
             Key: "uploads/" + filenameWithDatetime,
