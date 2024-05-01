@@ -7,6 +7,7 @@
     "serve": "nodemon index.js"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -17,6 +18,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.3",
     "morgan": "~1.9.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "virustotal": "^0.0.1"
   }
 }

@@ -9,7 +9,6 @@ async function createFile(req, res) {
       userEmail,
       fileName,
     };
-    console.log(fileData);
     const savedFile = await File.create(fileData);
 
     res.status(201).redirect("http://localhost:3000/");
@@ -32,6 +31,7 @@ async function getFiles(req, res) {
 async function getFilesByEmail(req, res) {
   try {
     const files = await File.find({ userEmail: req.params["email"] });
+    console.log(files);
     res.send(files);
   } catch (err) {
     console.log(err);
