@@ -9,12 +9,16 @@ import {
   GET_SINGLE_FILE_BEGIN,
   GET_SINGLE_FILE_SUCCESS,
   GET_SINGLE_FILE_ERROR,
+  FILE_UPLOAD_BEGIN,
+  FILE_UPLOAD_SUCCESS,
+  FILE_UPLOAD_ERROR,
 } from "../actions";
 import { useUserContext } from "./UserContext";
 
 const initialState = {
   isSideBarOpen: false,
   files: [],
+  fileUploadLoading: false,
   homefiles: [],
   isLoading: false,
   setMode: "none",
@@ -31,7 +35,52 @@ export const FilesProvider = ({ children }) => {
   const handleSetModeUpdate = (value) => {
     dispatch({ type: "SETMODE", payload: value });
   };
+  const fileVirusScan = (file) => {
+    dispatch({ type: FILE_UPLOAD_BEGIN });
+    const form = new FormData();
 
+    form.append("file", file);
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "x-apikey":
+          "b0d14d7d823d56f629df95e84bc78f75062bb1ee782bc358ee1e9ff08bcaf43e",
+      },
+    };
+
+    options.body = form;
+    let id = "";
+    fetch("https://www.virustotal.com/api/v3/files", options)
+      .then((response) => response.json())
+      .then((response) => {
+        id = response.data.id;
+        console.log(response);
+      })
+      .catch((err) => {
+        dispatch({ type: FILE_UPLOAD_ERROR });
+        console.error(err);
+      });
+    const options_2 = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "x-apikey":
+          "b0d14d7d823d56f629df95e84bc78f75062bb1ee782bc358ee1e9ff08bcaf43e",
+      },
+    };
+
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    const apiUrl = "https://www.virustotal.com/api/v3/files/";
+    fetch(`${proxyUrl}${apiUrl}${id}`, options)
+      .then((response) => response.json())
+      .then((response) => console.log(response))
+      .catch((err) => {
+        dispatch({ type: FILE_UPLOAD_ERROR });
+        console.error(err);
+      });
+    dispatch({ type: GET_FILES_SUCCESS });
+  };
   const fetchFiles = async () => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
@@ -83,6 +132,7 @@ export const FilesProvider = ({ children }) => {
         fetchFiles,
         handleSetModeUpdate,
         fetchFilesByEmail,
+        fileVirusScan,
       }}
     >
       {children}

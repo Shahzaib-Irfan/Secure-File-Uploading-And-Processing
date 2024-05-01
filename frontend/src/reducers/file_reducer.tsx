@@ -5,9 +5,18 @@ import {
   GET_SINGLE_FILE_BEGIN,
   GET_SINGLE_FILE_SUCCESS,
   GET_SINGLE_FILE_ERROR,
+  FILE_UPLOAD_BEGIN,
+  FILE_UPLOAD_SUCCESS,
+  FILE_UPLOAD_ERROR,
 } from "../actions";
 
 const file_reducer = (state, action) => {
+  if (action.type === FILE_UPLOAD_BEGIN) {
+    return { ...state, fileUploadLoading: true };
+  }
+  if (action.type === FILE_UPLOAD_SUCCESS || action.type === FILE_UPLOAD_ERROR) {
+    return { ...state, fileUploadLoading: false};
+  }
   if (action.type === GET_FILES_BEGIN) {
     return { ...state, isLoading: true };
   }
