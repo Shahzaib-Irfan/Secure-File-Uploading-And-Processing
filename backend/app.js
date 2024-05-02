@@ -11,7 +11,7 @@ var usersRouter = require("./routes/users");
 const userRoutes = require("./routes/userRoutes");
 const fileRoutes = require("./routes/fileRoutes");
 const axios = require("axios");
-const helmet = require('helmet');
+const helmet = require("helmet");
 
 var app = express();
 
@@ -38,35 +38,35 @@ app.use(
     noSniff: true, // Prevents browsers from sniffing MIME types
     permittedCrossDomainPolicies: true, // Defines policy for Adobe Flash Player
     referrerPolicy: true, // Controls the behavior of the Referer header
-    xssFilter: true // Adds some small XSS protections
+    xssFilter: true, // Adds some small XSS protections
   })
 );
 ////
 
 const inboundRules = [
   {
-      id: 1,
-      description: 'Allow requests from trusted IP addresses',
-      condition: (req) => {
-          const trustedIPs = ['127.0.0.1']; // Example trusted IP addresses
-          return trustedIPs.includes(req.ip);
-      },
-      action: (req, res, next) => {
-          // Allow the request to proceed
-          next();
-      }
+    id: 1,
+    description: "Allow requests from trusted IP addresses",
+    condition: (req) => {
+      const trustedIPs = ["127.0.0.1"]; // Example trusted IP addresses
+      return trustedIPs.includes(req.ip);
+    },
+    action: (req, res, next) => {
+      // Allow the request to proceed
+      next();
+    },
   },
   {
-      id: 2,
-      description: 'Deny requests from blocked IP addresses',
-      condition: (req) => {
-          const blockedIPs = ['192.168.2.1']; // Example blocked IP addresses
-          return blockedIPs.includes(req.ip);
-      },
-      action: (req, res) => {
-          // Deny the request with a forbidden response
-          res.sendStatus(403);
-      }
+    id: 2,
+    description: "Deny requests from blocked IP addresses",
+    condition: (req) => {
+      const blockedIPs = ["192.168.2.1"]; // Example blocked IP addresses
+      return blockedIPs.includes(req.ip);
+    },
+    action: (req, res) => {
+      // Deny the request with a forbidden response
+      res.sendStatus(403);
+    },
   },
   // Add more rules as needed
 ];
@@ -74,17 +74,16 @@ const inboundRules = [
 const inboundInterfaceMiddleware = (req, res, next) => {
   // Iterate through the rule set
   for (const rule of inboundRules) {
-      // Check if the condition of the rule is met
-      if (rule.condition(req)) {
-          // Execute the action associated with the rule
-          rule.action(req, res, next);
-          return; // Stop further processing if a rule is matched
-      }
+    // Check if the condition of the rule is met
+    if (rule.condition(req)) {
+      // Execute the action associated with the rule
+      rule.action(req, res, next);
+      return; // Stop further processing if a rule is matched
+    }
   }
   // If no rule is matched, proceed to the next middleware
   next();
 };
-
 
 //////
 

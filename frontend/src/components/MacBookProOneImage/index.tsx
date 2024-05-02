@@ -31,10 +31,9 @@ export default function MacBookProOneImage({
 }
   const getFilePreview = () => {
     if (isImage) {
-      console.log("Link", fileLink);
-      return <Img src={fileLink} alt="file_preview" onClick={() => openFileInNewTab()} className="h-[160px] w-full object-cover" />;
+      return <Img src={fileLink} alt="file_preview" onClick={() => openFileInNewTab()} className="h-[16px]" />;
     } else {
-      return <Img src={`https://docs.google.com/viewerng/viewer?url=${fileLink}&embedded=true`} alt="file_preview" className="h-[160px] w-full object-cover" />;
+      return <Img src={`https://docs.google.com/viewerng/viewer?url=${fileLink}&embedded=true`} onClick={() => openFileInNewTab()} alt="file_preview" className="h-[16px]" />;
     }
   };
 
@@ -48,7 +47,8 @@ export default function MacBookProOneImage({
               <div className="flex flex-col">
                 <div className="flex flex-col items-center p-2 bg-white-A700 rounded">
                   <div className="flex flex-col">
-                    {<Img src={fileLink} alt="jane_cooper" className="h-[16px]" />}
+                    {/* {<Img src={fileLink} alt="jane_cooper" className="h-[16px]" />} */}
+                    {getFilePreview()}
                   </div>
                 </div>
               </div>

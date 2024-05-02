@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "file-type": "^19.0.0",
+    "read-chunk": "^4.0.3"
+  }
+}

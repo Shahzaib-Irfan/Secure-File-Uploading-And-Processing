@@ -36,89 +36,84 @@ export default function Home() {
   useEffect(() =>{
     fetchFilesByEmail();
   }, [])
-  const handleFileChange = async (event) => {
+const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
   try {
-    interface Options {
-      method: string;
-      headers: {
-        accept: string;
-        'x-apikey': string;
-      };
-      body?: FormData;
-    }
+    const form = new FormData();
+    form.append('file', file);
 
-    const options: Options = {
+    const options = {
       method: 'POST',
       headers: {
         accept: 'application/json',
         'x-apikey': 'b0d14d7d823d56f629df95e84bc78f75062bb1ee782bc358ee1e9ff08bcaf43e'
-      }
+      },
+      body: form
     };
 
-    const form = new FormData(); // Assuming you have FormData object defined elsewhere
-    form.append('file', file);
-
-    options.body = form;
-    let id = '';
-    let malicious = 0;
     setLoading(true);
-        fetch('https://www.virustotal.com/api/v3/files', options)
-          .then((response) => response.json())
-          .then((response) => {
-            id = response.data.id;
-            const apiUrl = `http://localhost:3005/api/v1/files/${id}`;
 
-            return fetch(apiUrl)
-              .then((response) => response.json())
-              .then((response) => {
-                malicious = response.data.attributes.stats.malicious;
-                console.log(malicious);
-                setLoading(false);
-              })
-              .catch((err) => console.error(err));
-          })
-          .catch((err) => console.error(err));
-    
-    if(malicious === 0){
-          const sanitizedFileName = sanitizePath(file.name.substring(0, file.name.lastIndexOf('.')))
-          file.name = sanitizedFileName + '.' + file.name.substring(file.name.lastIndexOf('.') + 1)
-          const currentDatetime = new Date().toISOString().replace(/[-:.]/g, '');
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-          const filenameWithDatetime = `${currentDatetime}${uniqueSuffix}_${file.name}`;
-          console.log(filenameWithDatetime)
-          const params = {
-            Bucket: "incog-files.dev",
-            Key: "uploads/" + filenameWithDatetime,
-            Body: file,
-            ContentType: "image/jpg", // Set content type to "image/jpeg" for JPEG images
-          };
-      
-          const data = await s3Client.send(new PutObjectCommand(params));
-      
-          const url = await putObject(filenameWithDatetime);
-          const get_url = getObject(filenameWithDatetime);
-          
-          {token !== "" &&  axios.post('http://localhost:3005/fileApi/files', {
+    const response = await fetch('https://www.virustotal.com/api/v3/files', options);
+    const responseData = await response.json();
+    const id = responseData.data.id;
+
+    const apiUrl = `http://localhost:3005/api/v1/files/${id}`;
+    const apiResponse = await fetch(apiUrl);
+    const apiData = await apiResponse.json();
+    const malicious = apiData.data.attributes.stats.malicious;
+
+    if (malicious === 0) {
+      const sanitizedFileName = sanitizePath(file.name.substring(0, file.name.lastIndexOf('.')));
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
+      const renamedFile = new File([file], `${sanitizedFileName}.${fileExtension}`, { type: file.type });
+
+      const currentDatetime = new Date().toISOString().replace(/[-:.]/g, '');
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const filenameWithDatetime = `${currentDatetime}${uniqueSuffix}_${renamedFile.name}`;
+
+      console.log(renamedFile.type);
+
+      const params = {
+        Bucket: "incog-files.dev",
+        Key: "uploads/" + filenameWithDatetime,
+        Body: renamedFile,
+        ContentType: renamedFile.type // Adjust content type according to the file type
+      };
+
+      const data = await s3Client.send(new PutObjectCommand(params));
+
+      const url = await putObject(filenameWithDatetime);
+      const get_url = getObject(filenameWithDatetime);
+
+      if (token !== "") {
+        axios.post('http://localhost:3005/fileApi/files', {
           fileLink: get_url,
           fileName: filenameWithDatetime,
           userEmail: currentUser.email,
         })
+        .then(() => {
+          fetchFilesByEmail();
+        })
         .catch(error => {
           console.error("Error uploading file to backend:", error);
         });
-        fetchFilesByEmail();
+      } else {
+        console.log("Token is empty.");
       }
+    } else {
+      window.alert("File is malicious and cannot be uploaded.");
     }
-    else{
-      window.alert("Files is Malicious and cannot be uploaded");
-    }
+    
+    setLoading(false);
   } catch (error) {
     console.error("Error uploading file:", error);
+    setLoading(false);
   }
 };
+
+
 
 
 async function putObject(fileName)
