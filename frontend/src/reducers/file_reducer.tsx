@@ -1,3 +1,4 @@
+import { accessSync } from "fs";
 import {
   GET_FILES_BEGIN,
   GET_FILES_SUCCESS,
@@ -8,9 +9,18 @@ import {
   FILE_UPLOAD_BEGIN,
   FILE_UPLOAD_SUCCESS,
   FILE_UPLOAD_ERROR,
+  UPDATE_SEARCH_VALUE,
+  FILTER_FILES,
 } from "../actions";
 
 const file_reducer = (state, action) => {
+  if (action.type === FILTER_FILES){
+    const {files} = state;
+    return {...state, filteredFiles: files.filter(file => file.fileName.slice(43, file.fileName.length).toLowerCase().includes(action.payload.toLowerCase()))}
+  }
+  if (action.type === UPDATE_SEARCH_VALUE){
+    return {...state, searchBarValue: action.payload};
+  }
   if (action.type === FILE_UPLOAD_BEGIN) {
     return { ...state, fileUploadLoading: true };
   }

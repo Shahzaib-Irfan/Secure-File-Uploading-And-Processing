@@ -23,7 +23,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const {currentUser, token} = useUserContext();
-  const {files, fetchFilesByEmail} = useFilesContext();
+  const {files, fetchFilesByEmail, searchBarValue, filteredFiles} = useFilesContext();
 
 // Instantiate S3 client
   const s3Client = new S3Client({
@@ -105,7 +105,7 @@ const handleFileChange = async (event) => {
     } else {
       window.alert("File is malicious and cannot be uploaded.");
     }
-    
+
     setLoading(false);
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -144,7 +144,7 @@ function getObject(filename)
   };
   if (loading){
     return <Loading/>;
-  
+
   }
   else{
 
@@ -204,7 +204,7 @@ function getObject(filename)
                 <Button leftIcon = {<Img src="images/img_icon_star_o.svg" alt="image_one" className="h-[16px] w-[16px] ml-[13px] md:ml-0" />} rightIcon = {<Heading size="md" as="h5" className="mr-[13px] md:mr-0 !text-gray-600_01">
                     Starred
                   </Heading>} className="flex justify-between items-center w-[51%] md:w-full gap-5 p-2.5">
-                  
+
                 </Button>
                 <Button leftIcon = {<Img
                     src="images/img_icon_trash.svg"
@@ -251,7 +251,7 @@ function getObject(filename)
                       </Heading>
                     </div>
                     <div className="mt-4 gap-6 grid-cols-[repeat(auto-fill,_minmax(234px_,_1fr))] grid">
-                      {files.map((file, index) =>{
+                      {searchBarValue === "" ? files.map((file, index) =>{
                         return (
                           <div className="flex w-full">
                             <div className="w-full shadow-xs rounded">
@@ -261,7 +261,26 @@ function getObject(filename)
                                   <div className="flex justify-end">
                                     <div className="flex">
                                       <Heading as="p" className="self-end">
-                                        {file.fileName.slice(20, file.fileName.length)}
+                                        {file.fileName.slice(43, file.fileName.length)}
+                                      </Heading>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                    }) : filteredFiles.map((file, index) =>{
+                        return (
+                          <div className="flex w-full">
+                            <div className="w-full shadow-xs rounded">
+                              <MacBookProOneImage fileLink={file.fileLink} index = {index}/>
+                              <div className="p-2 bg-white-A700">
+                                <div className="my-1">
+                                  <div className="flex justify-end">
+                                    <div className="flex">
+                                      <Heading as="p" className="self-end">
+                                        {file.fileName.slice(43, file.fileName.length)}
                                       </Heading>
                                     </div>
                                   </div>

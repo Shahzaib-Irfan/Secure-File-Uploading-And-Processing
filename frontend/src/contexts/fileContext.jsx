@@ -12,16 +12,19 @@ import {
   FILE_UPLOAD_BEGIN,
   FILE_UPLOAD_SUCCESS,
   FILE_UPLOAD_ERROR,
+  UPDATE_SEARCH_VALUE,
+  FILTER_FILES,
 } from "../actions";
 import { useUserContext } from "./UserContext";
 
 const initialState = {
   isSideBarOpen: false,
   files: [],
+  filteredFiles: [],
   fileUploadLoading: false,
   homefiles: [],
   isLoading: false,
-  setMode: "none",
+  searchBarValue: "",
   isError: false,
   singleFile: {},
   singleFileError: false,
@@ -85,7 +88,7 @@ export const FilesProvider = ({ children }) => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
       const response = await axios.get(
-        "http://localhost:3005/dishApi/dishes/getDishes"
+        "http://localhost:3005/fileApi/files/getFiles"
       );
       const data = await response.data;
       dispatch({ type: GET_FILES_SUCCESS, payload: data });
@@ -94,6 +97,13 @@ export const FilesProvider = ({ children }) => {
     }
   };
 
+  const filterFiles = (searchBarValue) => {
+    try {
+      dispatch({ type: FILTER_FILES, payload: searchBarValue });
+    } catch (e) {
+      console.log("Error in filtering files", e);
+    }
+  };
   const fetchFilesByEmail = async (id) => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
@@ -111,9 +121,20 @@ export const FilesProvider = ({ children }) => {
       dispatch({ type: GET_FILES_ERROR });
     }
   };
+  const handleSearchBar = (searchValue) => {
+    try {
+      dispatch({ type: UPDATE_SEARCH_VALUE, payload: searchValue });
+    } catch (e) {
+      console.log("Error in Updating Search Bar Value", e);
+    }
+  };
   useEffect(() => {
     fetchFilesByEmail();
   }, []);
+  useEffect(() => {
+    //filter the file list when user types something
+    filterFiles(state.searchBarValue);
+  }, [state.searchBarValue]);
   const fetchSingleFile = async (url) => {
     dispatch({ type: GET_SINGLE_FILE_BEGIN });
     try {
@@ -133,6 +154,7 @@ export const FilesProvider = ({ children }) => {
         handleSetModeUpdate,
         fetchFilesByEmail,
         fileVirusScan,
+        handleSearchBar,
       }}
     >
       {children}

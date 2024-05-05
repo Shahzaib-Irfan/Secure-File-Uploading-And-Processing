@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CloseSVG } from "../../assets/images";
 import { Img, Button, Button2, Input, Heading, Text } from "./..";
 import { Link } from "react-router-dom";
 import { useUserContext } from "contexts/UserContext";
+import { useFilesContext } from "contexts/fileContext";
 
 interface Props {
   className?: string;
@@ -11,6 +12,11 @@ interface Props {
 export default function Header({ ...props }: Props) {
   const [searchBarValue, setSearchBarValue] = React.useState("");
   const {currentUser, token, logout} = useUserContext();
+  const {handleSearchBar} = useFilesContext();
+
+  useEffect(() => {
+    handleSearchBar(searchBarValue);
+  }, [searchBarValue]);
 
   return (
     <header {...props}>
