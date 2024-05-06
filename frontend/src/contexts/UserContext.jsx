@@ -100,7 +100,7 @@ export const UserProvider = ({ children }) => {
       );
       const { message } = response.data;
       console.log(message);
-      if (message == "Invalid credentials") {
+      if (message === "Invalid credentials") {
         const response_data = await axios.post(
           "http://localhost:3005/userApi/users",
           {
@@ -108,11 +108,6 @@ export const UserProvider = ({ children }) => {
             lastName: lastName,
             email: email,
             password: password,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
           }
         );
         const { token, user, redirect } = response_data.data;

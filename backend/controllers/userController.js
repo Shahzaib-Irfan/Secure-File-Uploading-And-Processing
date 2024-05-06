@@ -7,7 +7,7 @@ async function createUser(req, res) {
   try {
     let user;
     user = await User.create(req.body);
-
+    console.log(res.statusCode);
     res.status(201).redirect("http://localhost:3000/signin");
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -23,11 +23,10 @@ async function getUsers(req, res) {
     res.send(500).json({ error: err.message });
   }
 }
-async function resSample(req,res){
-  try{
-    await res.json(req.params)
-  } 
-  catch(err){}
+async function resSample(req, res) {
+  try {
+    await res.json(req.params);
+  } catch (err) {}
 }
 
 async function getSingleUser(req, res) {
@@ -95,5 +94,5 @@ module.exports = {
   deleteUser,
   login,
   adminDasboard,
-  resSample
+  resSample,
 };

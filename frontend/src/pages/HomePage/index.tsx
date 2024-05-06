@@ -14,6 +14,8 @@ import { AxiosResponse } from 'axios';
 import CloudmersiveVirusApiClient from 'cloudmersive-virus-api-client';
 import Loading from '../../constants/Loading';
 
+const MAX_FILE_SIZE = 30 * 1024 * 1024;
+
 function sanitizePath(str: string): string {
   const pathTraversalPattern = new RegExp('(\\.\\.)|(%2e%2e)|(%2e%2f)|(%2f%2e)|(%5c%2e%2e)|(%5c%2e%2f)|(%5c%2f%2e)|(\\/)', 'gi');
   return str.replace(pathTraversalPattern, '');
@@ -40,6 +42,11 @@ const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
+  if (file.size > MAX_FILE_SIZE) {
+    window.alert("File size is larger than 30MB. Please select a smaller file.");
+    return;
+  }
+  
   try {
     const form = new FormData();
     form.append('file', file);

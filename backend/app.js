@@ -114,7 +114,6 @@ app.get("/api/v1/files/:id", async (req, res) => {
   }
 });
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/userApi", userRoutes);
 app.use("/fileApi", fileRoutes);
 
