@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
 import reducer from "reducers/user_reducer";
 import { useNavigate } from "react-router-dom";
+import sanitizeHtml from 'sanitize-html';
 import {
   GET_USER_BEGIN,
   GET_USER_SUCCESS,
@@ -20,6 +21,23 @@ import {
   GET_USER_FILES_ERROR,
 } from "../actions";
 
+
+const sanitizeInput = (input) => {
+  // Define a regular expression for allowed characters
+  const whitelist = /^[a-zA-Z0-9 _@.,-]*$/;
+
+  const keywords = ['script', 'object', 'embed', 'applet', 'html', 'body', 'title', 'link', 'style', 'frame', 'iframe', 'frameset', 'xml', 'xss', 'function', 'console', 'return'];
+  const pattern = new RegExp('\\b(?:' + keywords.join('|') + ')\\b');
+  
+
+  // Check if the input matches the whitelist pattern
+  if (whitelist.test(input) && !pattern.test(input)) {
+    return true;
+  }
+
+  // If the input doesn't match the whitelist pattern, return false
+  return false;
+};
 const getUserFromMemory = (el) => {
   let user = localStorage.getItem("user");
   if (user) {
@@ -56,68 +74,108 @@ const UserContext = React.createContext();
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const loginWithAuthentication = async (email, password) => {
-    dispatch({ type: GET_CURRENT_USER_BEGIN });
     try {
-      const response = await axios.post(
-        "http://localhost:3005/userApi/login",
-        {
-          email: email,
-          password: password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    email = sanitizeHtml(email)
+    password = sanitizeHtml(password)
+    if ((sanitizeInput(password)) && (sanitizeInput(email)) && email !="" && password !="") {
+      dispatch({ type: GET_CURRENT_USER_BEGIN });
+      
+        const response = await axios.post(
+          "http://localhost:3005/userApi/login",
+          {
+            email: email,
+            password: password,
           },
-        }
-      );
-      const { token, user, redirect } = response.data;
-      dispatch({
-        type: GET_CURRENT_USER_SUCCESS,
-        payload: { token, user, redirect },
-      });
-      window.location.href = redirect;
-    } catch (error) {
-      dispatch({
-        type: GET_CURRENT_USER_ERROR,
-      });
-    }
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const { token, user, redirect } = response.data;
+        dispatch({
+          type: GET_CURRENT_USER_SUCCESS,
+          payload: { token, user, redirect },
+        });
+        window.location.href = redirect;
+      }
+      else{
+        alert("Invalid Input Occured")
+      }
+      } catch (error) {
+        dispatch({
+          type: GET_CURRENT_USER_ERROR,
+        });
+      }
+    
   };
 
   const SignUp = async (firstName, lastName, email, password) => {
-    dispatch({ type: GET_CURRENT_USER_BEGIN });
     try {
-      const response = await axios.post(
-        "http://localhost:3005/userApi/login",
+    email = sanitizeHtml(email)
+    password = sanitizeHtml(password)
+    firstName = sanitizeHtml(firstName)
+    lastName = sanitizeHtml(lastName)
+    if(sanitizeInput(firstName))
+    {
+      if(sanitizeInput(lastName))
+      {
+        if(sanitizeInput(email))
         {
-          email: email,
-          password: password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const { message } = response.data;
-      console.log(message);
-      if (message === "Invalid credentials") {
-        const response_data = await axios.post(
-          "http://localhost:3005/userApi/users",
+          if(sanitizeInput(password))
           {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
+            dispatch({ type: GET_CURRENT_USER_BEGIN });
+            
+              const response = await axios.post(
+                "http://localhost:3005/userApi/login",
+                {
+                  email: email,
+                  password: password,
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              const { message } = response.data;
+              console.log(message);
+              if (message === "Invalid credentials") {
+                const response_data = await axios.post(
+                  "http://localhost:3005/userApi/users",
+                  {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password,
+                  }
+                );
+                const { token, user, redirect } = response_data.data;
+                window.location.href = redirect;
+              }
+            
           }
-        );
-        const { token, user, redirect } = response_data.data;
-        window.location.href = redirect;
+          else{
+            alert('invalid Password')
+          }
+        }
+        else{
+          alert('invalid Email')
+        }
       }
-    } catch (error) {
-      dispatch({
-        type: GET_CURRENT_USER_ERROR,
-      });
-    }
+      else{
+        alert('invalid Last Name')
+      }
+  }
+  else{
+    alert("Invalid First Name")
+  }
+} catch (error) {
+  dispatch({
+    type: GET_CURRENT_USER_ERROR,
+  });
+}
+    
   };
   const logout = async () => {
     dispatch({

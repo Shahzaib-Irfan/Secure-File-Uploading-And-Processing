@@ -1,5 +1,5 @@
 import React from "react";
-import { Img } from "./..";
+import { Img } from "./..";;
 
 interface Props {
   className?: string;
@@ -33,7 +33,7 @@ export default function MacBookProOneImage({
     if (isImage) {
       return <Img src={fileLink} alt="file_preview" onClick={() => openFileInNewTab()} className="h-[16px]" />;
     } else {
-      return <Img src={`https://docs.google.com/viewerng/viewer?url=${fileLink}&embedded=true`} onClick={() => openFileInNewTab()} alt="file_preview" className="h-[16px]" />;
+      return <Img src='https://img.icons8.com/clouds/100/000000/document.png' onClick={() => openFileInNewTab()} alt="file_preview" className="h-[16px]" />;
     }
   };
 
@@ -42,7 +42,7 @@ export default function MacBookProOneImage({
       <div className="w-full">
         <div className="bg-white-A700">
           <div className="h-[160px] md:h-auto border-indigo-50 border-b border-solid relative cursor-pointer">
-            {<Img src={fileLink} alt="file_preview" onClick={() => openFileInNewTab()} className="h-[160px] w-full object-cover" />}
+            {isImage ? <Img src={fileLink} alt="file_preview" onClick={() => openFileInNewTab()} className="h-[160px] w-full object-cover" /> : <Img src='https://img.icons8.com/clouds/100/000000/document.png' alt="file_preview" onClick={() => openFileInNewTab()} className="h-[160px] w-full object-cover" />}
             <div className="flex flex-col bottom-[14.00px] left-[16.00px] m-auto absolute">
               <div className="flex flex-col">
                 <div className="flex flex-col items-center p-2 bg-white-A700 rounded">

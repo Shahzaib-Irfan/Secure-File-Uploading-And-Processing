@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
 import reducer from "../reducers/file_reducer";
 //import { products_url as url } from "../utils/constants";
+import sanitizeHtml from 'sanitize-html';
 import {
   GET_FILES_BEGIN,
   GET_FILES_SUCCESS,
@@ -29,6 +30,23 @@ const initialState = {
   singleFile: {},
   singleFileError: false,
   singleFileLoading: false,
+};
+
+const sanitizeInput = (input) => {
+  // Define a regular expression for allowed characters
+  const whitelist = /^[a-zA-Z0-9 _@.,-]*$/;
+
+  const keywords = ['script', 'object', 'embed', 'applet', 'html', 'body', 'title', 'link', 'style', 'frame', 'iframe', 'frameset', 'xml', 'xss', 'function', 'console', 'return'];
+  const pattern = new RegExp('\\b(?:' + keywords.join('|') + ')\\b');
+  
+
+  // Check if the input matches the whitelist pattern
+  if (whitelist.test(input) && !pattern.test(input)) {
+    return true;
+  }
+
+  // If the input doesn't match the whitelist pattern, return false
+  return false;
 };
 const FilesContext = React.createContext();
 
@@ -85,6 +103,7 @@ export const FilesProvider = ({ children }) => {
     dispatch({ type: GET_FILES_SUCCESS });
   };
   const fetchFiles = async () => {
+
     dispatch({ type: GET_FILES_BEGIN });
     try {
       const response = await axios.get(
@@ -99,7 +118,14 @@ export const FilesProvider = ({ children }) => {
 
   const filterFiles = (searchBarValue) => {
     try {
-      dispatch({ type: FILTER_FILES, payload: searchBarValue });
+      searchBarValue = sanitizeHtml(searchBarValue);
+      if(sanitizeInput(searchBarValue))
+      {
+        dispatch({ type: FILTER_FILES, payload: searchBarValue });
+      }
+      else{
+        alert("Invalid Input")
+      }
     } catch (e) {
       console.log("Error in filtering files", e);
     }
