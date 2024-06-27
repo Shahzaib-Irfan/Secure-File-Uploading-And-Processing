@@ -66,7 +66,7 @@ const handleFileChange = async (event) => {
     const responseData = await response.json();
     const id = responseData.data.id;
 
-    const apiUrl = `http://localhost:3005/api/v1/files/${id}`;
+    const apiUrl = `${process.env.BACKEND_URL}api/v1/files/${id}`;
     const apiResponse = await fetch(apiUrl);
     const apiData = await apiResponse.json();
     const malicious = apiData.data.attributes.stats.malicious;
@@ -95,7 +95,7 @@ const handleFileChange = async (event) => {
       const get_url = getObject(filenameWithDatetime);
 
       if (token !== "") {
-        axios.post('http://localhost:3005/fileApi/files', {
+        axios.post(`${process.env.BACKEND_URL}fileApi/files`, {
           fileLink: get_url,
           fileName: filenameWithDatetime,
           userEmail: currentUser.email,

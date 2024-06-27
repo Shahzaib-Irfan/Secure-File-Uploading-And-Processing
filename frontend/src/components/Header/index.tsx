@@ -87,7 +87,7 @@ export default function Header({ ...props }: Props) {
               <div>
                 <div>
                   <div className="bg-white-A700 rounded-[8px]">
-                    {token !== "" ? <Button2 size="xs" variant = "fill" shape="round" className="w-full mt-4 rounded-full py-3" onClick={() => logout()}>
+                    {token !== undefined ? <Button2 size="xs" variant = "fill" shape="round" className="w-full mt-4 rounded-full py-3" onClick={() => logout()}>
                       <Text>
                         Logout
                       </Text>

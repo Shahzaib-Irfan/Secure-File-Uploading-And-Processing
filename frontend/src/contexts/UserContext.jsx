@@ -59,7 +59,7 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: GET_CURRENT_USER_BEGIN });
     try {
       const response = await axios.post(
-        "http://localhost:3005/userApi/login",
+        `${process.env.BACKEND_URL}userApi/login`,
         {
           email: email,
           password: password,
@@ -87,7 +87,7 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: GET_CURRENT_USER_BEGIN });
     try {
       const response = await axios.post(
-        "http://localhost:3005/userApi/login",
+        `${process.env.BACKEND_URL}userApi/login`,
         {
           email: email,
           password: password,
@@ -102,7 +102,7 @@ export const UserProvider = ({ children }) => {
       console.log(message);
       if (message === "Invalid credentials") {
         const response_data = await axios.post(
-          "http://localhost:3005/userApi/users",
+          `${process.env.BACKEND_URL}userApi/users`,
           {
             firstName: firstName,
             lastName: lastName,

@@ -88,7 +88,7 @@ export const FilesProvider = ({ children }) => {
     dispatch({ type: GET_FILES_BEGIN });
     try {
       const response = await axios.get(
-        "http://localhost:3005/fileApi/files/getFiles"
+        `${process.env.BACKEND_URL}fileApi/files/getFiles`
       );
       const data = await response.data;
       dispatch({ type: GET_FILES_SUCCESS, payload: data });
@@ -109,7 +109,7 @@ export const FilesProvider = ({ children }) => {
     try {
       if (token !== "") {
         const response = await axios.get(
-          `http://localhost:3005/fileApi/files/getFilesByEmail/${currentUser.email}`
+          `${process.env.BACKEND_URL}fileApi/files/getFilesByEmail/${currentUser.email}`
         );
         const data = await response.data;
         console.log(data);
