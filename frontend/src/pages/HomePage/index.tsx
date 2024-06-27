@@ -14,6 +14,7 @@ import { AxiosResponse } from 'axios';
 import CloudmersiveVirusApiClient from 'cloudmersive-virus-api-client';
 import Loading from '../../constants/Loading';
 
+
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
 
 function sanitizePath(str: string): string {
@@ -70,7 +71,7 @@ const handleFileChange = async (event) => {
     const apiResponse = await fetch(apiUrl);
     const apiData = await apiResponse.json();
     const malicious = apiData.data.attributes.stats.malicious;
-
+    
     if (malicious === 0) {
       const sanitizedFileName = sanitizePath(file.name.substring(0, file.name.lastIndexOf('.')));
       const fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1);
